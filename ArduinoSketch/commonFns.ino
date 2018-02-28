@@ -5,16 +5,18 @@ void vfo_sel()   // select vfo A/B/M when VFO button pressed
   if (vfo_M_sel)
   {
     vfo_M = vfo;
-    vfo_A_sel = true;
-    vfo_B_sel = false;
-    vfo_M_sel = false;
-    vfo = vfo_A;
-    bfo1 = bfo_A;
-    sideband = sb_A;
-    if (sideband == USB)
+    vfo_selA();
+    /*
+      vfo_A_sel = true;
+      vfo_B_sel = false;
+      vfo_M_sel = false;
+      vfo = vfo_A;
+      bfo1 = bfo_A;
+      sideband = sb_A;
+      if (sideband == USB)
       bfo1_USB = bfo_A;
-    else
-      bfo1_LSB = bfo_A;
+      else
+      bfo1_LSB = bfo_A;*/
   }
   else if (vfo_B_sel)
   {
@@ -38,16 +40,17 @@ void vfo_sel()   // select vfo A/B/M when VFO button pressed
   else if (vfo_A_sel)
   {
     vfo_A = vfo;
-    vfo_A_sel = false;
-    vfo_B_sel = true;
-    vfo_M_sel = false;
-    vfo = vfo_B;
-    bfo1 = bfo_B;
-    sideband = sb_B;
-    if (sideband == USB)
-      bfo1_USB = bfo_B;
-    else
-      bfo1_LSB = bfo_B;
+    vfo_selB();
+    /*   vfo_A_sel = false;
+       vfo_B_sel = true;
+       vfo_M_sel = false;
+       vfo = vfo_B;
+       bfo1 = bfo_B;
+       sideband = sb_B;
+       if (sideband == USB)
+         bfo1_USB = bfo_B;
+       else
+         bfo1_LSB = bfo_B; */
   }
   set_vfo();
   display_vfo();
@@ -59,6 +62,34 @@ void vfo_sel()   // select vfo A/B/M when VFO button pressed
   set_band();                        // 2 new lines 24/8/17 Joe
   display_band();
 
+}
+
+void vfo_selA()
+{
+  vfo_A_sel = true;
+  vfo_B_sel = false;
+  vfo_M_sel = false;
+  vfo = vfo_A;
+  bfo1 = bfo_A;
+  sideband = sb_A;
+  if (sideband == USB)
+    bfo1_USB = bfo_A;
+  else
+    bfo1_LSB = bfo_A;
+}
+
+void vfo_selB()
+{
+  vfo_A_sel = false;
+  vfo_B_sel = true;
+  vfo_M_sel = false;
+  vfo = vfo_B;
+  bfo1 = bfo_B;
+  sideband = sb_B;
+  if (sideband == USB)
+    bfo1_USB = bfo_B;
+  else
+    bfo1_LSB = bfo_B;
 }
 
 void mem_decr()     // decrement mem ch no
@@ -86,6 +117,11 @@ void ptt_ON()
 {
   if (txstatus == false)
   {
+    if (splitON)
+    {
+      vfo_selB(); // in Split mode vfo B is Tx vfo
+      changed_f = 1;
+    }
     txstatus = true;
     set_TX_filters();
     digitalWrite(TX_RX, HIGH);
@@ -97,6 +133,11 @@ void ptt_OFF()
 {
   if (txstatus == true)
   {
+    if (splitON)
+    {
+      vfo_selA(); // in Split mode vfo A is Rx vfo
+      changed_f = 1;
+    }
     txstatus = false;
     reset_TX_filters();
     digitalWrite(TX_RX, LOW);
@@ -110,12 +151,22 @@ void toggle_ptt()      // toggle the PTT_output pin TX_RX, either by touch butto
     Tx_start_time = millis();
   if (txstatus)   // Tx mode
   {
+    if (splitON)
+    {
+      vfo_selB(); // in Split mode vfo B is Tx vfo
+      changed_f = 1;
+    }
     set_TX_filters();
     digitalWrite(TX_RX, HIGH);
     displ_tx();
   }
   else
   {
+    if (splitON)
+    {
+      vfo_selA(); // in Split mode vfo A is Rx vfo
+      changed_f = 1;
+    }
     reset_TX_filters();
     digitalWrite(TX_RX, LOW);
     displ_rx();
@@ -213,7 +264,6 @@ void sideband_chg()     // change sidebands between USB/LSB and may be more in f
     sideband = LSB;
     bfo1 = bfo1_LSB;
   }
-  Serial.println(bfo1);
   display_sideband();
   display_bfo();
   save_frequency();
@@ -337,6 +387,7 @@ void save()       // save on EEPROM
   // Change message during save on Button
   tft.drawRoundRect(svx, svy, svwd, svht, roundness, WHITE); // Save button outline
   tft.fillRoundRect(svx + 2, svy + 2, svwd - 4, svht - 4, roundness - 4, GREEN); //Save
+  tft.setTextSize(2);
   tft.setTextColor(YELLOW);
   tft.setCursor(svx + 8, svy + 10);
   tft.print("SVNG");
@@ -348,7 +399,7 @@ void save()       // save on EEPROM
   else
     write_vfo_B();
 
-  delay(200);  // test
+  //  delay(200);  // test
   // Reset Save button
   tft.drawRoundRect(svx, svy, svwd, svht, roundness, MAGENTA); // Save button outline
   tft.fillRoundRect(svx + 2, svy + 2, svwd - 4, svht - 4, roundness - 4, RED); //Save

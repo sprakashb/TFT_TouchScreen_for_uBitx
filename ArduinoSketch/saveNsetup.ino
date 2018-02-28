@@ -52,6 +52,9 @@ void set_bfo1()   // if sb changes readjust bfo and vfo
   // si5351.set_freq(bfo2, SI5351_CLK0); // 12 MHZ
   si5351.set_freq(bfo1 * SI5351_FREQ_MULT, SI5351_CLK1);  // 33 MHz for USB , 57 MHz for LSB
   si5351.set_freq(((vfo_tx + if_offset)* SI5351_FREQ_MULT), SI5351_CLK2); // 45 to 75 MHz
+//  if (CAT_ctrl)
+//  CAT_get_freq();
+//    update_CAT();
 }
 
 void set_bfo2()
@@ -150,15 +153,15 @@ void setup_vfo_screen() // sets up main screen for VFO etc display
   tft.fillRoundRect(f3x + 2, f3y + 2, f3wd - 4, f3ht - 4, roundness - 4, PURPLE); //F3
   tft.setTextSize(2);
   tft.setTextColor(WHITE);
-  tft.setCursor(f3x + 25, f3y + 6);
-  tft.print("F3");
+  tft.setCursor(f3x + 15, f3y + 6);
+  tft.print("SPLIT");
 
-/*  tft.drawRoundRect(f4x, f4y, f4wd, f4ht, roundness, GREEN); // F4 button outline
-  tft.fillRoundRect(f4x + 2, f4y + 2, f4wd - 4, f4ht - 4, roundness - 4, GREENYELLOW); //F4
-  tft.setTextSize(2);
-  tft.setTextColor(MAROON);
-  tft.setCursor(f4x + 25, f4y + 6);
-  tft.print("F4"); */
+  /*  tft.drawRoundRect(f4x, f4y, f4wd, f4ht, roundness, GREEN); // F4 button outline
+    tft.fillRoundRect(f4x + 2, f4y + 2, f4wd - 4, f4ht - 4, roundness - 4, GREENYELLOW); //F4
+    tft.setTextSize(2);
+    tft.setTextColor(MAROON);
+    tft.setCursor(f4x + 25, f4y + 6);
+    tft.print("F4"); */
 
   tft.drawRect(botx, boty, botwd, botht, WHITE);  // surrounding RECT
   tft.fillRect(botx + 2, boty + 2, botwd - 4, botht - 4, BLACK); // bot strip
@@ -169,9 +172,10 @@ void setup_vfo_screen() // sets up main screen for VFO etc display
 //---------------------------
 
 
-/////// $$$ EEPROM related
+// EEPROM related
 void init_eprom()      // write some info on EEPROM when initially loaded or when magic number changes
 {
+  uint16_t i;
   EEPROM.write(eprom_base_addr, magic_no);  // check byte may be same as ver no at 0 address
   display_mem_msg("InitEPrm");
   //display_msg(60, "Init EEPROM");
@@ -190,7 +194,7 @@ void init_eprom()      // write some info on EEPROM when initially loaded or whe
 
   // Now store all 13 channels
 
-  for (int i = 1; i <= MAX_BANDS; i++)  // starting from 1st entry in table of freq
+  for ( i = 1; i <= MAX_BANDS; i++)  // starting from 1st entry in table of freq
   {
     ch_info.s_vfo = VFO_T[i];
     if (VFO_T[i] < 10000000)
@@ -208,7 +212,7 @@ void init_eprom()      // write some info on EEPROM when initially loaded or whe
   }
 
   vfo = 7100000;
-  for (int i = MAX_BANDS + 1; i <= 24; i++) // starting from
+  for ( i = MAX_BANDS + 1; i <= 24; i++) // starting from
   {
     ch_info.s_vfo = vfo;
     ch_info.s_bfo = bfo1_LSB;
@@ -217,7 +221,7 @@ void init_eprom()      // write some info on EEPROM when initially loaded or whe
     EEPROM_writeAnything(address, ch_info);
   }
   vfo = 14000000;
-  for (int i = 25; i <= 50; i++)  // starting from 160m
+  for ( i = 25; i <= 50; i++)  // starting from 160m
   {
     ch_info.s_vfo = vfo;
     ch_info.s_bfo = bfo1_USB;
