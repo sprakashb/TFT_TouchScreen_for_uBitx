@@ -126,9 +126,9 @@ void write_vfo_A();
 void write_vfo_B();
 //void write_vfo_M();
 
-
 //------- TFT Display related----
-// Assign human-readable names to some common 16-bit color values: // EXTRA Color definitions thanks Joe Basque
+// EXTRA Color definitions thanks Joe Basque
+// Assign human-readable names to some common 16-bit color values: 
 #define BLACK       0x0000      /*   0,   0,   0 */
 #define LIGHTGREY   0xC618      /* 192, 192, 192 */
 #define GREY        0x7BEF      /* 128, 128, 128 */
@@ -140,15 +140,15 @@ void write_vfo_B();
 #define PURPLE      0x780F      /* 128,   0, 128 */
 #define YELLOW      0xFFE0      /* 255, 255,   0 */
 #define WHITE       0xFFFF      /* 255, 255, 255 */
-#define PINK        0xF81F
+#define PINK        0xF81F      /* 255,   0, 255 */
 #define ORANGE      0xFD20      /* 255, 165,   0 */
-#define GREEN       0x07E0
+#define GREEN       0x07E0      /*   0, 255,   0 */
 #define DARKGREEN   0x03E0      /*   0, 128,   0 */
 #define OLIVE       0x7BE0      /* 128, 128,   0 */
 #define GREENYELLOW 0xAFE5      /* 173, 255,  47 */
-#define CYAN        0x07FF
+#define CYAN        0x07FF      /*   0, 255, 255 */
 #define DARKCYAN    0x03EF      /*   0, 128, 128 */
-#define MAGENTA     0xF81F
+#define MAGENTA     0xF81F      /* 255,   0, 255 */
 
 #define LCD_CS      A3 // Chip Select goes to Analog 3    //**? Are these fixed
 #define LCD_CD      A2 // Command/Data goes to Analog 2
