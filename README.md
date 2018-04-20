@@ -1,5 +1,5 @@
-# TFT_TouchScreen_for_uBitx with CAT and Split
-A Touch screen and colour TFT for uBitx (version 2.9). Now with CAT and Split functionality.
+# TFT_TouchScreen_for_uBitx with CAT, Split and UP/Down Scan
+A Touch screen and colour TFT for uBitx (version 2.9). Now with CAT and Split functionality is further enanced with auto scan in Up/Down directions.
 
 A small PCB is designed for connecting the uBitx with Arduino Mega 2560 having a MCUFriend 2.4 inch TFT display and Touch Screen. The circuit diagram and PCB are created in KiCad. PCB pattern for heat transfer is given along with a overlay. This being first version of PCB, some variations are expected in future updates. All CB related files in PCB folder.
 
