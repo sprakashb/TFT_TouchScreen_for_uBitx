@@ -1,6 +1,6 @@
 // some of the following are borrowed from various permitted sources
-
-void serialEvent()
+void check_CAT()
+//void serialEvent()
 {
   while (Serial.available())
   {
@@ -14,6 +14,7 @@ void serialEvent()
     }
   }
 }
+
 // The next 4 functions are needed to implement the CAT protocol, which
 // uses 4-bit BCD formatting.
 //
@@ -98,8 +99,8 @@ unsigned long readFreq(byte* cmd) {
 
 void update_CAT()
 {
-  CAT_get_freq();
-  CAT_set_mode();
+  //CAT_get_freq();
+ // CAT_set_mode();
 }
 
 void CAT_set_freq()   // first four bytes in buffer are freq in compressed bcd
@@ -111,6 +112,8 @@ void CAT_set_freq()   // first four bytes in buffer are freq in compressed bcd
   // changed_f = 1; //update display gives prob with wsjtx reading current freq time out
   display_frequency();
   set_bfo1();
+  set_band();
+  display_band();
   CAT_ctrl = 0;
 }
 
@@ -133,11 +136,14 @@ void CAT_get_freq()
   {
     Serial.write(CAT_buff[i]);
   }
+
+//  Serial.write(0);
   CAT_ctrl = 0;
 }
 
 void CAT_ptt_on()
 {
+  PTT_by_CAT=true;
   ptt_ON();
   Serial.write(0);
   CAT_ctrl = 0;
@@ -145,6 +151,7 @@ void CAT_ptt_on()
 
 void CAT_ptt_off()
 {
+  PTT_by_CAT=false;
   ptt_OFF();
   Serial.write(0);
   CAT_ctrl = 0;
@@ -152,8 +159,6 @@ void CAT_ptt_off()
 
 void CAT_set_mode()
 {
-    Serial.write(0);
-
   if (CAT_buff[0] == 00)
     sideband = LSB ;
   else
@@ -161,27 +166,26 @@ void CAT_set_mode()
 
   set_bfo1();
   display_sideband();
+  Serial.write(0);
   CAT_ctrl = 0;
 }
 
 void CAT_toggle_VFO()   // only between VFO A & B
 {
-   if (vfo_A_sel)
+  //Serial.write(0x00);    // just send 1 bytes ACK
+  if (vfo_A_sel)
     vfo_selB();
   else
-     vfo_selA();
-    // CAT_get_freq(); 
-  Serial.write(0x00);    // just send 1 dummy bytes ACK
-
+    vfo_selA();
+  // CAT_get_freq();
+  Serial.write(0x00);    // just send 1 bytes ACK
   CAT_ctrl = 0;
-
-  return; //
 }
 
 void CAT_Eeprom_read()
 {
-  Serial.write(0x00);    // just send 2 dummy bytes
-  Serial.write(0x00);    // just send 2 dummy bytes
+  Serial.write(0x10);    // Mem 64 = 10 means 38400 baud
+  Serial.write(0x00);    // Mem 65 = 00
   CAT_ctrl = 0;
 
   //  Serial.write(0x10);  // cat rate 38400
@@ -259,7 +263,7 @@ void exec_CAT(byte* cmd)
         printLine2(buff);
       */
       //     Serial.write(0x00);
-      Serial.write(0x00);
+    //  Serial.write(0x00);
       CAT_ctrl = 0;
       //   Serial.flush();
 

@@ -115,7 +115,7 @@ void mem_incr()     // increment mem ch no
 
 void ptt_ON()
 {
-  if (txstatus == false)
+  // if (txstatus == false)
   {
     if (splitON)
     {
@@ -131,7 +131,7 @@ void ptt_ON()
 
 void ptt_OFF()
 {
-  if (txstatus == true)
+  // if (txstatus == true)
   {
     if (splitON)
     {
@@ -207,6 +207,40 @@ void reset_TX_filters()
   digitalWrite(TX_LPF_A, 0);
   digitalWrite(TX_LPF_B, 0);
   digitalWrite(TX_LPF_C, 0);
+}
+
+void scan_up()
+{
+  while (in_scan_up)  // will be taken care in loop
+  {
+    vfo = vfo + radix;
+    if (vfo >= F_MAX_T[bnd_count]) in_scan_up = false; //stop at band edge
+    display_frequency();
+    set_bfo1();
+    if (check_touch())  // any touch to stop scan?
+      break;
+    Serial.write(0);
+    delay(200);
+    CAT_get_freq();  // update CAT freq if connected
+  }
+  CAT_get_freq();  // update CAT freq if connected
+}
+
+void scan_dn()
+{
+  while (in_scan_dn)
+  {
+    vfo = vfo - radix;
+    if (vfo <= F_MIN_T[bnd_count]) in_scan_dn = false; //stop at band edge
+    display_frequency();
+    set_bfo1();
+    if (check_touch())
+      break;
+    Serial.write(0);
+    delay(200);
+    CAT_get_freq();  // update CAT freq if connected
+  }
+  CAT_get_freq();  // update CAT freq if connected
 }
 
 
@@ -422,3 +456,20 @@ int get_button(int x)
   else
     return 0;
 }
+
+bool check_touch()    // check if touched on screen
+{
+  tp = ts.getPoint();
+  pinMode(XM, OUTPUT);
+  pinMode(YP, OUTPUT);
+  pinMode(XP, OUTPUT);
+  pinMode(YM, OUTPUT);
+  delay(ts_delay);     // delay between two touches to reduce sensitivity
+
+  if (tp.z > MINPRESSURE && tp.z < MAXPRESSURE)
+    return true;
+  else
+    return false;
+
+}
+

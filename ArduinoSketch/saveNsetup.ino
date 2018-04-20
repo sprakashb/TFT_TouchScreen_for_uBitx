@@ -52,9 +52,9 @@ void set_bfo1()   // if sb changes readjust bfo and vfo
   // si5351.set_freq(bfo2, SI5351_CLK0); // 12 MHZ
   si5351.set_freq(bfo1 * SI5351_FREQ_MULT, SI5351_CLK1);  // 33 MHz for USB , 57 MHz for LSB
   si5351.set_freq(((vfo_tx + if_offset)* SI5351_FREQ_MULT), SI5351_CLK2); // 45 to 75 MHz
-//  if (CAT_ctrl)
-//  CAT_get_freq();
-//    update_CAT();
+  //  if (CAT_ctrl)
+  //  CAT_get_freq();
+  //    update_CAT();
 }
 
 void set_bfo2()
@@ -100,8 +100,22 @@ void setup_vfo_screen() // sets up main screen for VFO etc display
   tft.setTextColor(BLUE);
   tft.print("Rx");
 
+  tft.drawRect(scandnx, scandny, scandnwd, scandnht, GREEN);  // Scan Down button
+  tft.fillRect(scandnx + 2, scandny + 2, scandnwd - 2, scandnht - 2, BLUE);
+  tft.setCursor(scandnx + 3, scandny + 20);
+  tft.setTextSize(3);
+  tft.setTextColor(WHITE);
+  tft.print("D");
+
   tft.drawRoundRect(frqx, frqy, frqwd, frqht, roundness, WHITE);  // freq box outline
   // tft.fillRoundRect(frqx+2, frqy+2, frqwd-4, frqht-4, roundness-4, ORANGE);   //freq box
+
+  tft.drawRect(scanupx, scanupy, scanupwd, scanupht, GREEN); // Scanup button
+  tft.fillRect(scanupx + 2, scanupy + 2, scanupwd - 2, scanupht - 2, BLUE);
+  tft.setCursor(scanupx + 3, scanupy + 5);
+  tft.setTextSize(3);
+  tft.setTextColor(WHITE);
+  tft.print("U");
 
   tft.fillRoundRect(bandx, bandy, bandwd, bandht, roundness, WHITE); //band button outline
   tft.fillRoundRect(bandx + 2, bandy + 2, bandwd - 4, bandht - 4, roundness - 4, GREY); //band

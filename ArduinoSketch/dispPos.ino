@@ -35,11 +35,30 @@ void dispPos()
   txrwd = buttonwd;    //50;
   txrht = buttonht;    //37;
 
+  /*  // frequeny box  Second Row
+    frqx = smwd + 35;  //50;
+    frqy = firstrowy + buttonht + 5; // 45;
+    frqwd = 3.5 * buttonwd;   // 264;
+    frqht = 1.3 * buttonht ;    //40;
+  */
+
+  // Scan Down area
+  scandnx = smwd + 35;
+  scandny = firstrowy + buttonht + 5;
+  scandnwd = 20;
+  scandnht = 1.3 * buttonht;
+
   // frequeny box  Second Row
-  frqx = smwd + 35;  //50;
+  frqx = scandnx + scandnwd + 5;
   frqy = firstrowy + buttonht + 5; // 45;
-  frqwd = 3.5 * buttonwd;   // 264;
+  frqwd = 3.0 * buttonwd;   //  3.0 was 3.5
   frqht = 1.3 * buttonht ;    //40;
+
+  // Scan Up area
+  scanupx = frqx + frqwd + 5;
+  scanupy = scandny;
+  scanupwd = scandnwd;
+  scanupht = 1.3 * buttonht;
 
   vfoABMx = smwd + spacing;  // 25 where A/B or M is displayed
   vfoABMy = frqy + 8;
@@ -100,16 +119,16 @@ void dispPos()
   f3wd = buttonwd; //70,
   f3ht = buttonht; //28;
 
- /* //F4 button not in ubitx
-  f4x = f3x + f3wd + spacing; // 240,
-  f4y = f1y;        //192,
-  f4wd = buttonwd;  //70,
-  f4ht = buttonht;  //28; */
+  /* //F4 button not in ubitx
+    f4x = f3x + f3wd + spacing; // 240,
+    f4y = f1y;        //192,
+    f4wd = buttonwd;  //70,
+    f4ht = buttonht;  //28; */
 
   // BOT MESSAGE STRIP /S Meter
   botx = smwd + 5;
   boty = f3y + f3ht; //220,
-  botwd = wd -botx-50;  //320, 30 for ver display
+  botwd = wd - botx - 70; //320, 30 for ver display
   botht = ht - (f3y + f3ht + 1); // 20
 
 }

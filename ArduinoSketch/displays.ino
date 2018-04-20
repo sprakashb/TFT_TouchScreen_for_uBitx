@@ -78,7 +78,7 @@ void display_frequency()
 {
   tft.setTextSize(4);
   tft.setTextColor(WHITE, BLACK);
-  tft.setCursor(frqx + 20, frqy + 8); //(70, 50);
+  tft.setCursor(frqx + 2, frqy + 8); //(70, 50);
   if (vfo < 10000000)
     tft.print(" ");
   tft.print(vfo / 1000.0, 3);
@@ -217,7 +217,7 @@ void displ_split_button()
     tft.setCursor(f3x + 10, f3y + 6);
     tft.print("SPLIT");
   }
-  else   // under CAT control
+  else   // under Split mode control
   {
     tft.drawRoundRect(f3x, f3y, f3wd, f3ht, roundness, GREEN); // F3 button outline
     tft.fillRoundRect(f3x + 2, f3y + 2, f3wd - 4, f3ht - 4, roundness - 4, YELLOW); //F3
